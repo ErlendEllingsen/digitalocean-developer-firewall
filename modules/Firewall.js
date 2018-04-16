@@ -26,11 +26,11 @@ module.exports = function(config, fwObj) {
                 
                 try {
                     body = JSON.parse(body);
+                    body = body.firewall;
                 } catch (err) {
-                    reject('json_invalid');
+                    return reject('json_invalid');
                 }
 
-                fwObj = body;
                 resolve(body);
                 
             });
@@ -95,10 +95,14 @@ module.exports = function(config, fwObj) {
 
         console.log(`[${new Date().toLocaleString()}] Found ${foundRules.length} rules for deletion..`);
 
+        if (foundRules.length <= 0) {
+            console.log(`[${new Date().toLocaleString()}] Skipping deletion of rules (since zero)..`);
+            return resolve(true);
+        }
+
         let deleteObj = {
             inbound_rules: foundRules
         };
-
 
         request(
             {
@@ -112,16 +116,18 @@ module.exports = function(config, fwObj) {
             },
             function(err, res, body){
                 
-                console.log(body);
-
+                // Internal req err
                 if (err !== null) {
                     console.log(err);
-                    console.log(body);
                     reject('delete_request_failed');
                 }
-                
-                console.log('delete res: ' + res.statusCode);
 
+                // Response err
+                if (res.statusCode != 204) {
+                    console.log(body);
+                    reject('delete_request_api_reject');
+                }
+                
                 resolve(true);
                 
             });
@@ -129,35 +135,90 @@ module.exports = function(config, fwObj) {
             
         });
 
+        // end deleteOutdatedRules
     }
 
-    this.createRules = function(rules) {
+    this.createRules = function() {
+        return new Promise((resolve, reject) => {
 
-        self.deleteOutdatedRules().then(() => {
-            console.log('ok!');            
-        }).catch(reason => {
-            console.log(reason);
-        });
-        return;
+            let newRules = [];
 
-        self.refresh().then((body) => {
-            console.log('oki');
-            console.log(body);
-        }).catch(reason => {
-            console.log(reason);
-        });
+            let defaultRules = config.getDefaultRules();
+            let validAddresses = [];
+            if (self.IPV4 !== false) validAddresses.push(self.IPV4);
+            if (self.IPV6 !== false) validAddresses.push(self.IPV6);
 
-        if (rules == undefined) {
-            rules = config.getDefaultRules();
-        }
+            // Iterate through defaultRules and build new rules request obj.
+            for (let index in defaultRules) {
+                let df = defaultRules[index];
+                newRules.push({
+                    protocol: df.protocol,
+                    ports: df.ports,
+                    sources: {
+                        "addresses": validAddresses
+                    }
+                });
+            }
 
-        return;
+            // Build final req object to match API spec and send request
+            let createRulesObj = {
+                inbound_rules: newRules
+            };
 
-        console.log(rules);
+            // Create rules request
+            request(
+                {
+                    'uri': `https://api.digitalocean.com/v2/firewalls/${fwObj.id}/rules`,
+                    'method': 'POST',
+                    'auth': {
+                        bearer: config.getBearerToken()
+                    }, 
+                    'Content-Type': 'Application/json',
+                    'json': createRulesObj 
+                },
+                function(err, res, body){
+                    
+                    // Response err
+                    if (res.statusCode != 204) {
+                        console.log(body);
+                        reject('create_request_api_reject');
+                    }
+                    
+                    return resolve(true);
+                    
+                }
+            );
+    
 
-        console.log(fwObj);
+        });            
 
         // end createRules
+    }
+
+    this.updateFirewall = function(rules) {
+
+        self.refresh().then(() => {
+            console.log(`[${new Date().toLocaleString()}] Initial refresh.`);            
+            return self.deleteOutdatedRules();
+        }).then(() => {
+            console.log(`[${new Date().toLocaleString()}] Rules deleted.`);            
+            return self.refresh();
+        }).then(() => {
+            console.log(`[${new Date().toLocaleString()}] Firewall refreshed.`);            
+            return self.createRules();
+        }).then(() => {
+            console.log(`[${new Date().toLocaleString()}] New rules created.`);                        
+        }).catch(reason => {
+            console.log('Firewall createRules failed.');
+            console.log(reason);
+            process.exit(1);
+        });
+
+        return;
+
+
+
+        // end updateFirewall
     }
 
 }

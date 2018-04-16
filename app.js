@@ -54,7 +54,7 @@ request.get(
 
     fw.findIP().then(() => {
         console.log(`[${new Date().toLocaleString()}] Found Ips: `, fw.IPV4, fw.IPV6);
-        fw.createRules();
+        fw.updateFirewall();
     }).catch(reason => {
         console.log(`[${new Date().toLocaleString()}] ERR Unable to fetch IPS`);        
     });
