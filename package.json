@@ -1,0 +1,16 @@
+{
+  "name": "do-controller",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "minimist": "^1.2.0",
+    "public-ip": "^2.4.0",
+    "request": "^2.85.0"
+  }
+}

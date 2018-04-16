@@ -1,0 +1,14 @@
+{
+    "default_rules": [
+        {
+            "name": "ssh", 
+            "protocol": "tcp",
+            "ports": "22"
+        },
+        {
+            "name": "mysql",
+            "protocol": "tcp",
+            "ports": "3306"
+        }
+    ]
+}
