@@ -30,6 +30,7 @@ module.exports = function(config, fwObj) {
                     reject('json_invalid');
                 }
 
+                fwObj = body;
                 resolve(body);
                 
             });
@@ -84,7 +85,60 @@ module.exports = function(config, fwObj) {
         // end findIP
     }
 
+    this.deleteOutdatedRules = function() {
+        return new Promise((resolve, reject) => {
+
+        let rules = fwObj.inbound_rules; 
+        let foundRules = rules.filter(elem => {
+            return (elem.sources.addresses.length > 0 && elem.sources.addresses[0] != '127.0.0.1');
+        });
+
+        console.log(`[${new Date().toLocaleString()}] Found ${foundRules.length} rules for deletion..`);
+
+        let deleteObj = {
+            inbound_rules: foundRules
+        };
+
+
+        request(
+            {
+                'uri': `https://api.digitalocean.com/v2/firewalls/${fwObj.id}/rules`,
+                'method': 'DELETE',
+                'auth': {
+                    bearer: config.getBearerToken()
+                }, 
+                'Content-Type': 'Application/json',
+                'json': deleteObj 
+            },
+            function(err, res, body){
+                
+                console.log(body);
+
+                if (err !== null) {
+                    console.log(err);
+                    console.log(body);
+                    reject('delete_request_failed');
+                }
+                
+                console.log('delete res: ' + res.statusCode);
+
+                resolve(true);
+                
+            });
+
+            
+        });
+
+    }
+
     this.createRules = function(rules) {
+
+        self.deleteOutdatedRules().then(() => {
+            console.log('ok!');            
+        }).catch(reason => {
+            console.log(reason);
+        });
+        return;
 
         self.refresh().then((body) => {
             console.log('oki');
