@@ -25,7 +25,7 @@ request.get(
 'https://api.digitalocean.com/v2/firewalls',
 {
     auth: {
-        bearer: token
+        bearer: config.getBearerToken()
     }
 }, function(err, res, body){
     

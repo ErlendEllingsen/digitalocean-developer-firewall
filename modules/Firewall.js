@@ -1,3 +1,4 @@
+const request = require('request');
 const publicIp = require('public-ip');
 
 module.exports = function(config, fwObj) {
@@ -9,6 +10,31 @@ module.exports = function(config, fwObj) {
 
     this.IPV4 = false;
     this.IPV6 = false;
+
+    this.refresh = function() {
+        return new Promise((resolve, reject) => {
+            request.get(
+                `https://api.digitalocean.com/v2/firewalls/${fwObj.id}`,
+                {
+                    auth: {
+                        bearer: config.getBearerToken()
+                    }
+                },
+            function(err, res, body){
+                
+                if (err !== null) reject('request_failed');
+                
+                try {
+                    body = JSON.parse(body);
+                } catch (err) {
+                    reject('json_invalid');
+                }
+
+                resolve(body);
+                
+            });
+        });
+    }
 
     
     this.findIP = function(preSet4, preset6) {
@@ -60,9 +86,18 @@ module.exports = function(config, fwObj) {
 
     this.createRules = function(rules) {
 
+        self.refresh().then((body) => {
+            console.log('oki');
+            console.log(body);
+        }).catch(reason => {
+            console.log(reason);
+        });
+
         if (rules == undefined) {
             rules = config.getDefaultRules();
         }
+
+        return;
 
         console.log(rules);
 
