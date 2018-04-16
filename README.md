@@ -22,6 +22,19 @@ The goal of this tool is to **encourage better security** by making the process 
 
 ## Installation
 
+//To do
+
+## Usage
+
+//To do
+
+## Roadmap 
+
+//To do
+
+## Contribution
+
+//To do
 
 ## License
 MIT Copyright Erlend Ellingsen 2018. See LICENSE.
