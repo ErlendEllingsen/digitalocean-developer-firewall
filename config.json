@@ -10,5 +10,6 @@
             "protocol": "tcp",
             "ports": "3306"
         }
-    ]
+    ],
+    "firewall_name": "allow-developer"
 }

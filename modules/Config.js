@@ -9,4 +9,9 @@ module.exports = function(authObj, configObj) {
         return configObj.default_rules;
     }
 
+    this.getStoredFirewallName = function() {
+        if (configObj.firewall_name != undefined) return configObj.firewall_name;
+        return null;
+    }
+
 }   

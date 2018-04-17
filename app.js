@@ -40,12 +40,22 @@ request.get(
         throw "Unable to find firewalls. Are you sure credentials are right?";
     }
 
+    // Figure out which fw to fetch
+    let fwName = 'allow-developer';
+    if (startupArgs['firewall-name'] != undefined) {
+        fwName = startupArgs['firewall-name'];
+    } else if ((storedFWName = config.getStoredFirewallName()) != null) {
+        fwName = storedFWName;
+    }
+
+    console.log(`[${new Date().toLocaleString()}] Using firewall: "${fwName}"`);        
+
     // Fetch correct fw
     let firewalls = body.firewalls;
 
-    let devWall = firewalls.find(function(e){return e.name == 'allow-developer';});
+    let devWall = firewalls.find(function(e){return e.name == fwName;});
     if (devWall == undefined) {
-        throw 'Unable to find "allow-developer" firewall.';
+        throw `Unable to find "${fwName}" firewall.`;
     }
 
     fw = new (require('./modules/Firewall'))(config, devWall);

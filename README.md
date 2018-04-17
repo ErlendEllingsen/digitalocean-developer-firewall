@@ -34,9 +34,11 @@ You can get started by cloning the repository or downloading it in ZIP-form.
 
 ### 1. Prepare your DigitalOcean-account
 
-Go to [DO Firewalls](https://cloud.digitalocean.com/networking/firewalls). Create a firewall called `allow-developer`. Add it to your tags or droplets. Make sure that there are at least 1 outbound rule and 1 that matches 127.0.0.1. *(This is done because firewalls needs at least one active rule, and this tool would delete all entries causing an error).*
+Go to [DO Firewalls](https://cloud.digitalocean.com/networking/firewalls). Create a firewall called `allow-developer`. You can also use other names, but then you have to specify the name either in `./config.json` or as a argument option. See below for the argument options. 
 
-It should look like this:
+ Add it to your tags or droplets. Make sure that there are at least 1 outbound rule and 1 that matches 127.0.0.1. *(This is done because firewalls needs at least one active rule, and this tool would delete all entries causing an error).*
+
+It should look something like this:
 
 <img src="https://i.imgur.com/EGYSjeT.png" style="max-height: 200px;"> 
 
@@ -56,7 +58,13 @@ Once you have created a firewall, assigned it to your tags and/or droplets and c
 
 2. Configure `./config.json` to reflect the rules your firewall should have. You can use port ranges as well as ports. See the DigitalOcean API for details. (Default are SSH, 22 and MySQL, 3306). 
 
+### 3. Run 
+
 Run `node app.js`
+
+or e.g:
+
+Run `node app.js --firewall-name="your-personal-firewall"`
 
 The program should now delete records in the firewall that do not match your current IPV4/IPV6 address (or 127.0.0.1) and create new ones for your current address.
 
@@ -64,9 +72,16 @@ The program should now delete records in the firewall that do not match your cur
 
 <img src="https://i.imgur.com/jE8sBGm.png" style="max-height: 200px;">
 
+### Argument Options
+The following argument options can be used:
+
+|Argument|Description|Default value|
+|:--------|:-----------|:-------------|
+|`--firewall-name`|Specifices which firewall should be used. This could be useful when multiple developers are working on the same server from different locations (ie. using one fw each).|Will fall back to firewall_name property in `./config.json`<br><br>If no property is found default value will be `allow-developer`|
+
 ## Roadmap 
 
-* Add support for custom firewall name
+* <strike>Add support for custom firewall name</strike> Done
 * Add "whitelist" of IP's that should not be deleted.
 * Make the tool available from terminal
 * Either add bearer token as a argument/flag or through environment variables. (Or something like that)
