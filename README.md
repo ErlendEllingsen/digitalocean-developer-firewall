@@ -3,6 +3,8 @@
 
 **A tool for developers to easily configure firewalls and gain access to their servers when using DigitalOcean cloud firewalls.**
 
+<img src="https://i.imgur.com/XggRPgd.png">
+
 ## Abstract
 
 #### Background
