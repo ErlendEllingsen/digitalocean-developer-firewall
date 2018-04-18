@@ -1,5 +1,4 @@
 # DigitalOcean Developer Firewall
-<img src="https://community-cdn-digitalocean-com.global.ssl.fastly.net/assets/tutorials/images/large/Firewalls_social.png?1496688423">
 
 **A tool for developers to easily configure firewalls and gain access to their servers when using DigitalOcean cloud firewalls.**
 
