@@ -1,5 +1,9 @@
 # DigitalOcean Developer Firewall
 
+
+[![Twitter Follow](https://img.shields.io/twitter/follow/erlend_e.svg?style=social&label=Follow)](https://twitter.com/erlend_e)
+
+
 **A tool for developers to easily configure firewalls and gain access to their servers when using DigitalOcean cloud firewalls.**
 
 <img src="https://i.imgur.com/XggRPgd.png">
