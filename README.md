@@ -98,7 +98,7 @@ You can always make adjustments directly to the `./whitelist.json` file as well 
 #### NB: About `./whitelist.json`
 The file should be created automatically upon using any of the above arguments. If you wish to create or modify it manually, be sure to use the following format:
 
-```JSON
+```
 {
     "global": [ip1, ip2, ...],
     "firewalls": {
