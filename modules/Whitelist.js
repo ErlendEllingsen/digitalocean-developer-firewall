@@ -17,6 +17,7 @@ module.exports = function(config, startupArgs) {
             return;
         }
         console.log(`[${new Date().toLocaleString()}] No whitelist present -- ignoring.`);
+        self.save();
     }
     
     this.save = function() {
