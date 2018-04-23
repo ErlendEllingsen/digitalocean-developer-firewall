@@ -95,6 +95,28 @@ You can always make adjustments directly to the `./whitelist.json` file as well 
 |`--wh-clear`|No|Optional|If `fw-name` is specified, the supplied firewall whitelist will be cleared. If not, the entire whitelist will be cleared.|
 |`--wh-list`|No|Optional|If `fw-name` is specified, the supplied firewall whitelist will be listed. If not, the entire whitelist will be listed.|
 
+#### NB: About `./whitelist.json`
+The file should be created automatically upon using any of the above arguments. If you wish to create or modify it manually, be sure to use the following format:
+
+```JSON
+{
+    "global": [ip1, ip2, ...],
+    "firewalls": {
+    	"fw1": [ip1, ip2, ...],
+    	"fw2": [ip1, ip2, ...]
+    }
+}
+```
+
+Default file:
+
+````JSON
+{
+    "global": [],
+    "firewalls": {}
+}
+````
+
 
 
 ## Roadmap 
