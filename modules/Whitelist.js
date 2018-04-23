@@ -26,7 +26,7 @@ module.exports = function(config, startupArgs) {
     }
 
     this.getWhiteList = function(fwName) {
-        let protectedList = ['127.0.0.1', '::1'];
+        let protectedList = [];
         // fetch globals
         for (ip of self.whitelist.global) {
             protectedList.push(ip);
@@ -37,8 +37,6 @@ module.exports = function(config, startupArgs) {
                 protectedList.push(ip);
             }
         }
-        console.log(`[${new Date().toLocaleString()}] Whitelist export: ${protectedList.length} entries.`);        
-        console.dir(protectedList);
         return protectedList;
     }
 
@@ -188,7 +186,7 @@ module.exports = function(config, startupArgs) {
                 return;                
             }
 
-            
+
 
         } catch (err) {
             console.error(`[${new Date().toLocaleString()}] ERROR exception occurred whilst listing whitelist.`);

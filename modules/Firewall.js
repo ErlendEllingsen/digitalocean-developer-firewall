@@ -27,6 +27,9 @@ module.exports = function(config, fwObj, fwName) {
                 try {
                     body = JSON.parse(body);
                     body = body.firewall;
+
+                    fwObj = body;
+
                 } catch (err) {
                     return reject('json_invalid');
                 }
@@ -198,23 +201,67 @@ module.exports = function(config, fwObj, fwName) {
             if (self.IPV4 !== false) validAddresses.push(self.IPV4);
             if (self.IPV6 !== false) validAddresses.push(self.IPV6);
 
-            // --- TODO: Implement whitelist logic here ----
+            // Prepend protected ips from whitelist into -> validAddresses
+            let protectedIps = config.getWhiteList().getWhiteList(fwName);
+            for (let ip of protectedIps) {
+                if (!validAddresses.includes(ip)) validAddresses.push(ip);
+            }
 
-            // Iterate through defaultRules and build new rules request obj.
-            for (let index in defaultRules) {
-                let df = defaultRules[index];
-                newRules.push({
-                    protocol: df.protocol,
-                    ports: df.ports,
+            // Iterate through existing rules, ensure that we do not create double rules
+            // This can cause errors with the fw. (has happened before, had to delete entire fw)
+            let existingRules = fwObj.inbound_rules;
+
+            let rulesForCreation = [];
+            
+            for (let newRule of defaultRules) {
+
+                let eligibleIps = []; //array of ip's that do not already exist 
+
+                for (let ip of validAddresses) {
+
+                    let ruleExists = (existingRules.find(function(el){
+                        let matchPorts = el.ports == newRule.ports;
+                        let matchProtocol = el.protocol == newRule.protocol;
+                        let matchIp = (el.sources.addresses != undefined && el.sources.addresses.includes(ip));
+                        return (matchPorts && matchProtocol && matchIp);
+                    })) != undefined;
+
+                    if (ruleExists) {
+                        console.log(`[${new Date().toLocaleString()}] Already exists: Ip [${ip}], port [${newRule.ports}], protocol [${newRule.protocol}] -- skipping`);                        
+                    } else {
+                        console.log(`[${new Date().toLocaleString()}] Eligible rule: Ip [${ip}], port [${newRule.ports}], protocol [${newRule.protocol}] -- preparing for create`);                        
+                        eligibleIps.push(ip);
+                    }
+
+                }
+
+                if (eligibleIps.length <= 0) {
+                    console.log(`[${new Date().toLocaleString()}] No eligible ips for port [${newRule.ports}], protocol [${newRule.protocol}] -- skipping`);                    
+                    continue;
+                } 
+
+                console.log(`[${new Date().toLocaleString()}] ${eligibleIps.length} eligible ips for port [${newRule.ports}], protocol [${newRule.protocol}] -- queueing`);                                        
+                rulesForCreation.push({
+                    protocol: newRule.protocol,
+                    ports: newRule.ports,
                     sources: {
-                        "addresses": validAddresses
+                        "addresses": eligibleIps
                     }
                 });
+                
+                // end newRule loop
+            }
+
+            console.log(`[${new Date().toLocaleString()}] Creating a total of ${rulesForCreation.length} rules`);                            
+
+            if (rulesForCreation.length <= 0) {
+                console.log(`[${new Date().toLocaleString()}] Skipping creation of rules (since zero)..`);
+                return resolve(true);
             }
 
             // Build final req object to match API spec and send request
             let createRulesObj = {
-                inbound_rules: newRules
+                inbound_rules: rulesForCreation
             };
 
             // Create rules request
@@ -253,13 +300,13 @@ module.exports = function(config, fwObj, fwName) {
             console.log(`[${new Date().toLocaleString()}] Initial refresh.`);            
             return self.deleteOutdatedRules();
         }).then(() => {
-            console.log(`[${new Date().toLocaleString()}] Rules deleted.`);            
+            console.log(`[${new Date().toLocaleString()}] Step: Delete rules finished.`);            
             return self.refresh();
         }).then(() => {
             console.log(`[${new Date().toLocaleString()}] Firewall refreshed.`);            
             return self.createRules();
         }).then(() => {
-            console.log(`[${new Date().toLocaleString()}] New rules created.`);                        
+            console.log(`[${new Date().toLocaleString()}] Step: New rules finished.`);                        
         }).catch(reason => {
             console.log('Firewall createRules failed.');
             console.log(reason);
