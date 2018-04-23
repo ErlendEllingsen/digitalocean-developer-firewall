@@ -123,6 +123,7 @@ Default file:
 
 * <strike>Add support for custom firewall name</strike> Done
 * <strike>Add "whitelist" of IP's that should not be deleted </strike> Done
+* Update help screen to include whitelist info. (./modules/Helper)
 * Make the tool available from terminal
 * Either add bearer token as a argument/flag or through environment variables. (Or something like that)
 * Support different sets of rules (different rules for different firewalls)
