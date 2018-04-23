@@ -83,10 +83,18 @@ The following argument options can be used. Please note that argument options ar
 |`--IPv4`|Specifies IPv4 address to be used.|Will automatically try to resolve using [public-ip](https://www.npmjs.com/package/public-ip) which uses DNS lookups (might not be suitable for all public networks such as airports).|
 |`--IPv6`|Specifies IPv4 address to be used.|Will automatically try to resolve using [public-ip](https://www.npmjs.com/package/public-ip) which uses DNS lookups (might not be suitable for all public networks such as airports).|
 
+### Whitelist Argument Options
+|Argument|`--ip` flag|`--fw-name` flag|Description|
+|:--------|:-----------|:-----------|:-----------|
+|`--wh-add`|Required|Optional|Adds an IP to the whitelist. If no `fw-name` is supplied the IP will be added to global whitelist.|
+|`--wh-remove`|Required|Optional|Removes an IP from the whitelist. If no `fw-name` is supplied the IP will be removed from the global whitelist.|
+|`--wh-clear`|No|Optional|If `fw-name` is specified, the supplied firewall whitelist will be cleared. If not, the entire whitelist will be cleared.|
+|`--wh-list`|No|Optional|If `fw-name` is specified, the supplied firewall whitelist will be listed. If not, the entire whitelist will be listed.|
+
 ## Roadmap 
 
 * <strike>Add support for custom firewall name</strike> Done
-* Add "whitelist" of IP's that should not be deleted.
+* Add "whitelist" of IP's that should not be deleted. (In progress!)
 * Make the tool available from terminal
 * Either add bearer token as a argument/flag or through environment variables. (Or something like that)
 * Support different sets of rules (different rules for different firewalls)
