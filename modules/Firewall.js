@@ -38,12 +38,12 @@ module.exports = function(config, fwObj) {
     }
 
     
-    this.findIP = function(preSet4, preset6) {
+    this.findIP = function(preSet4, preSet6) {
         return new Promise((resolve, reject) => {
 
-            if (preSet4 != undefined || preset6 != undefined) {
-                if (preset4 != undefined) self.IPV4 = preSet4;
-                if (preset6 != undefined) self.IPV6 = preset6;
+            if (preSet4 != undefined || preSet6 != undefined) {
+                if (preSet4 != undefined) self.IPV4 = preSet4;
+                if (preSet6 != undefined) self.IPV6 = preSet6;
                 resolve(true);
             }
             

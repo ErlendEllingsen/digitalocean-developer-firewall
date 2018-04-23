@@ -62,7 +62,8 @@ request.get(
 
     console.log(`[${new Date().toLocaleString()}] Finding IP addresses...`);    
 
-    fw.findIP().then(() => {
+    // Check if IP-address is pre-set as parameter
+    fw.findIP(startupArgs.IPv4, startupArgs.IPv6).then(() => {
         console.log(`[${new Date().toLocaleString()}] Found Ips: `, fw.IPV4, fw.IPV6);
         fw.updateFirewall();
     }).catch(reason => {

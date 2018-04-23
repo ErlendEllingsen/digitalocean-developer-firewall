@@ -1,5 +1,6 @@
 # DigitalOcean Developer Firewall
 
+
 **A tool for developers to easily configure firewalls and gain access to their servers when using DigitalOcean cloud firewalls.**
 
 <img src="https://i.imgur.com/XggRPgd.png">
@@ -74,11 +75,13 @@ The program should now delete records in the firewall that do not match your cur
 <img src="https://i.imgur.com/jE8sBGm.png" style="max-height: 200px;">
 
 ### Argument Options
-The following argument options can be used:
+The following argument options can be used. Please note that argument options are case sensitive.
 
 |Argument|Description|Default value|
 |:--------|:-----------|:-------------|
 |`--firewall-name`|Specifices which firewall should be used. This could be useful when multiple developers are working on the same server from different locations (ie. using one fw each).|Will fall back to firewall_name property in `./config.json`<br><br>If no property is found default value will be `allow-developer`|
+|`--IPv4`|Specifies IPv4 address to be used.|Will automatically try to resolve using [public-ip](https://www.npmjs.com/package/public-ip) which uses DNS lookups (might not be suitable for all public networks such as airports).|
+|`--IPv6`|Specifies IPv4 address to be used.|Will automatically try to resolve using [public-ip](https://www.npmjs.com/package/public-ip) which uses DNS lookups (might not be suitable for all public networks such as airports).|
 
 ## Roadmap 
 
