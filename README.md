@@ -84,12 +84,18 @@ The following argument options can be used. Please note that argument options ar
 |`--IPv6`|Specifies IPv4 address to be used.|Will automatically try to resolve using [public-ip](https://www.npmjs.com/package/public-ip) which uses DNS lookups (might not be suitable for all public networks such as airports).|
 
 ### Whitelist Argument Options
+These arguments aren't required for the usage for the program itself, but are used to configure a whitelist of IP's that always will be kept on the firewall. This is useful if multiple developers are using the same firewall or e.g. you always want your home and office network connections to be whitelisted.
+
+You can always make adjustments directly to the `./whitelist.json` file as well (these options are simply an interface for the json-file). 
+
 |Argument|`--ip` flag|`--fw-name` flag|Description|
 |:--------|:-----------|:-----------|:-----------|
 |`--wh-add`|Required|Optional|Adds an IP to the whitelist. If no `fw-name` is supplied the IP will be added to global whitelist.|
 |`--wh-remove`|Required|Optional|Removes an IP from the whitelist. If no `fw-name` is supplied the IP will be removed from the global whitelist.|
 |`--wh-clear`|No|Optional|If `fw-name` is specified, the supplied firewall whitelist will be cleared. If not, the entire whitelist will be cleared.|
 |`--wh-list`|No|Optional|If `fw-name` is specified, the supplied firewall whitelist will be listed. If not, the entire whitelist will be listed.|
+
+
 
 ## Roadmap 
 
