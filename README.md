@@ -100,7 +100,7 @@ You can always make adjustments directly to the `./whitelist.json` file as well 
 ## Roadmap 
 
 * <strike>Add support for custom firewall name</strike> Done
-* Add "whitelist" of IP's that should not be deleted. (In progress!)
+* <strike>Add "whitelist" of IP's that should not be deleted </strike> Done
 * Make the tool available from terminal
 * Either add bearer token as a argument/flag or through environment variables. (Or something like that)
 * Support different sets of rules (different rules for different firewalls)
