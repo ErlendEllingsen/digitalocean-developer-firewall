@@ -96,17 +96,62 @@ module.exports = function(config, fwObj, fwName) {
             return (elem.sources.addresses.length > 0 && elem.sources.addresses[0] != '127.0.0.1');
         });
 
-        // --- TODO: Implement whitelist logic here ----
+        // Iterate through foundRules and remove rules that are whitelisted... 
+        let defRules = config.getDefaultRules();
+        let rulesForDeletion = [];
 
-        console.log(`[${new Date().toLocaleString()}] Found ${foundRules.length} rules for deletion..`);
+        // Iterate through existing routes and check them amongst the whitelist 
+        for (let rule of foundRules) {
+           
+            // check that the rules protocol and port matches
+            let matchingRule = defRules.find(function(el){
+                let matchProtocol = el.protocol.toLowerCase() == rule.protocol.toLowerCase();
+                let matchPorts = el.ports.toLowerCase() == rule.ports.toLowerCase();
+                return (matchProtocol && matchPorts);
+            });
 
-        if (foundRules.length <= 0) {
+            if (matchingRule == undefined) {
+                // The rules protocol and ports doesn't event match configs default_rules -- 
+                // Queue for deletion
+                rulesForDeletion.push(rule);
+                continue;
+            }
+
+            if (rule.sources.addresses == undefined) continue; // e.g. tag or droplet.. ignore 
+
+            let deleteIps = [];
+
+            // Check if any of the addresses aren't represented in the whitelist 
+            for (let ip of rule.sources.addresses) {
+                if (!protectedIps.includes(ip)) {
+                    console.log(`[${new Date().toLocaleString()}] Marked for deletion: Ip [${ip}], port [${rule.ports}], protocol [${rule.protocol}] not protected in whitelist -- delete`);
+                    deleteIps.push(ip);
+                }
+            }
+
+            // Push for deletion if IP's were found
+            if (deleteIps.length > 0) {
+                rulesForDeletion.push({
+                    protocol: rule.protocol,
+                    ports: rule.ports,
+                    sources: {
+                        addresses: deleteIps
+                    }
+                });
+            }
+
+
+        }
+
+        console.log(`[${new Date().toLocaleString()}] Found ${rulesForDeletion.length} rules for deletion..`);
+
+        if (rulesForDeletion.length <= 0) {
             console.log(`[${new Date().toLocaleString()}] Skipping deletion of rules (since zero)..`);
             return resolve(true);
         }
 
         let deleteObj = {
-            inbound_rules: foundRules
+            inbound_rules: rulesForDeletion
         };
 
         request(

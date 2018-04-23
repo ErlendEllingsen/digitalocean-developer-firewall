@@ -188,6 +188,8 @@ module.exports = function(config, startupArgs) {
                 return;                
             }
 
+            
+
         } catch (err) {
             console.error(`[${new Date().toLocaleString()}] ERROR exception occurred whilst listing whitelist.`);
             console.error(`[${new Date().toLocaleString()}] ERROR ${err}`);            
