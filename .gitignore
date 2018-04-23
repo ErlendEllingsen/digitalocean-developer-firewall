@@ -1,3 +1,4 @@
 config.auth.json
+whitelist.json
 
 node_modules

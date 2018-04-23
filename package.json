@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "colors": "^1.2.1",
     "minimist": "^1.2.0",
     "public-ip": "^2.4.0",
     "request": "^2.85.0"

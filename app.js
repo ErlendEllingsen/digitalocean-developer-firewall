@@ -13,11 +13,19 @@ if (!fs.existsSync('./config.auth.json')) {
 let authObj = JSON.parse(fs.readFileSync('./config.auth.json').toString());
 let configObj = JSON.parse(fs.readFileSync('./config.json').toString());
 
-
 let token = authObj['bearer-token'];
 
 const config = new (require('./modules/Config'))(authObj, configObj);
 
+// Check for initial functionality
+if (startupArgs.help != undefined || startupArgs.h != undefined) {
+    new (require('./modules/Helper'))().print();
+    process.exit(0);
+}
+
+// Init functionality: whitelist
+let whiteList = new(require('./modules/Whitelist'))(config, startupArgs);
+whiteList.init();
 
 let fw = null;
 
@@ -33,7 +41,7 @@ request.get(
     try {
         body = JSON.parse(body);
     } catch (err) {
-        throw "Unexpected response format. Error occurred trying to parse JSON.";
+        throw "Unexpected response format from DigitalOcean Firewall API. Error occurred trying to parse JSON.";
     }
 
     if (body.firewalls == undefined) {
