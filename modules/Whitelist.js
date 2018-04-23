@@ -25,6 +25,23 @@ module.exports = function(config, startupArgs) {
         
     }
 
+    this.getWhiteList = function(fwName) {
+        let protectedList = ['127.0.0.1', '::1'];
+        // fetch globals
+        for (ip of self.whitelist.global) {
+            protectedList.push(ip);
+        }
+        // fetch per fw
+        if (self.whitelist.firewalls[fwName] != undefined) {
+            for (ip of self.whitelist.firewalls[fwName]) {
+                protectedList.push(ip);
+            }
+        }
+        console.log(`[${new Date().toLocaleString()}] Whitelist export: ${protectedList.length} entries.`);        
+        console.dir(protectedList);
+        return protectedList;
+    }
+
     this.forceCorrectIP = function(ip) {
         if (ip == undefined) throw `IP address required but undefined. Ensure --ip flag is set.`;
         if (!validateIP(ip)) throw `Invalid IP address (${ip}) specified.`;

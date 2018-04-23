@@ -1,7 +1,7 @@
 const request = require('request');
 const publicIp = require('public-ip');
 
-module.exports = function(config, fwObj) {
+module.exports = function(config, fwObj, fwName) {
     const self = this;
 
     this.hi = function() {
@@ -89,9 +89,14 @@ module.exports = function(config, fwObj) {
         return new Promise((resolve, reject) => {
 
         let rules = fwObj.inbound_rules; 
+
+        let protectedIps = config.getWhiteList().getWhiteList(fwName);
+
         let foundRules = rules.filter(elem => {
             return (elem.sources.addresses.length > 0 && elem.sources.addresses[0] != '127.0.0.1');
         });
+
+        // --- TODO: Implement whitelist logic here ----
 
         console.log(`[${new Date().toLocaleString()}] Found ${foundRules.length} rules for deletion..`);
 
@@ -147,6 +152,8 @@ module.exports = function(config, fwObj) {
             let validAddresses = [];
             if (self.IPV4 !== false) validAddresses.push(self.IPV4);
             if (self.IPV6 !== false) validAddresses.push(self.IPV6);
+
+            // --- TODO: Implement whitelist logic here ----
 
             // Iterate through defaultRules and build new rules request obj.
             for (let index in defaultRules) {

@@ -26,6 +26,7 @@ if (startupArgs.help != undefined || startupArgs.h != undefined) {
 // Init functionality: whitelist
 let whiteList = new(require('./modules/Whitelist'))(config, startupArgs);
 whiteList.init();
+config.setWhiteList(whiteList);
 
 let fw = null;
 
@@ -66,7 +67,7 @@ request.get(
         throw `Unable to find "${fwName}" firewall.`;
     }
 
-    fw = new (require('./modules/Firewall'))(config, devWall);
+    fw = new (require('./modules/Firewall'))(config, devWall, fwName);
 
     console.log(`[${new Date().toLocaleString()}] Finding IP addresses...`);    
 
