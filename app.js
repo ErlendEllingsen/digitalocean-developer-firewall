@@ -53,6 +53,8 @@ request.get(
     let fwName = 'allow-developer';
     if (startupArgs['firewall-name'] != undefined) {
         fwName = startupArgs['firewall-name'];
+    } else if (startupArgs['fw-name'] != undefined) {
+        fwName = startupArgs['fw-name'];
     } else if ((storedFWName = config.getStoredFirewallName()) != null) {
         fwName = storedFWName;
     }
