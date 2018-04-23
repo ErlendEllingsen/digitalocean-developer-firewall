@@ -12,6 +12,7 @@
     "colors": "^1.2.1",
     "minimist": "^1.2.0",
     "public-ip": "^2.4.0",
-    "request": "^2.85.0"
+    "request": "^2.85.0",
+    "validate-ip-node": "^1.0.6"
   }
 }
