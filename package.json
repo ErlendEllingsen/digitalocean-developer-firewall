@@ -1,7 +1,7 @@
 {
   "name": "digitalocean-developer-firewall",
   "version": "1.1.0",
-  "description": "",
+  "description": "Tool for developers to easily configure firewalls and gain access to their servers when using DigitalOcean cloud firewalls.",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
