@@ -187,6 +187,12 @@ module.exports = function(config, startupArgs) {
                 return;                
             }
 
+            if (self.whitelist.firewalls[firewall] == undefined) throw `Specified firewall [${firewall}] does not exist in whitelist.`;
+            console.log(`${colors.bold(firewall)}: `);
+            for (let ip of self.whitelist.firewalls[firewall]) {
+                console.log(`   ${ip}`);
+            }
+
 
 
         } catch (err) {

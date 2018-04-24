@@ -229,7 +229,7 @@ module.exports = function(config, fwObj, fwName) {
                     if (ruleExists) {
                         console.log(`[${new Date().toLocaleString()}] Already exists: Ip [${ip}], port [${newRule.ports}], protocol [${newRule.protocol}] -- skipping`);                        
                     } else {
-                        console.log(`[${new Date().toLocaleString()}] Eligible rule: Ip [${ip}], port [${newRule.ports}], protocol [${newRule.protocol}] -- preparing for create`);                        
+                        console.log(`[${new Date().toLocaleString()}] Eligible rule: Ip [${ip}], port [${newRule.ports}], protocol [${newRule.protocol}] -- create`);                        
                         eligibleIps.push(ip);
                     }
 
@@ -307,6 +307,7 @@ module.exports = function(config, fwObj, fwName) {
             return self.createRules();
         }).then(() => {
             console.log(`[${new Date().toLocaleString()}] Step: New rules finished.`);                        
+            console.log(`[${new Date().toLocaleString()}] Process complete!`);                        
         }).catch(reason => {
             console.log('Firewall createRules failed.');
             console.log(reason);
