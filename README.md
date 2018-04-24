@@ -124,7 +124,8 @@ Default file:
 * <strike>Add support for custom firewall name</strike> Done
 * <strike>Add "whitelist" of IP's that should not be deleted </strike> Done
 * Update help screen to include whitelist info. (./modules/Helper)
-* Make the tool available from terminal
+* <strike>Make the tool available from terminal</strike> Done (`do-firewall`)
+* Create better help for CLI tool. Autogenerate `./config.json`, `./whitelist.json` and `./config.auth.json`?
 * Either add bearer token as a argument/flag or through environment variables. (Or something like that)
 * Support different sets of rules (different rules for different firewalls)
 * <strike>Support multiple firewalls.</strike> Done (See `--fw-name` and whitelist)
