@@ -127,9 +127,9 @@ Default file:
 * Make the tool available from terminal
 * Either add bearer token as a argument/flag or through environment variables. (Or something like that)
 * Support different sets of rules (different rules for different firewalls)
-* Support multiple firewalls.
+* <strike>Support multiple firewalls.</strike> Done (See `--fw-name` and whitelist)
 
-(Not complete)
+
 
 ## Contribution
 
