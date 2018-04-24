@@ -4,15 +4,35 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "firewall",
+    "cloud",
+    "digitalocean",
+    "digital-ocean",
+    "security",
+    "server",
+    "network",
+    "configuration",
+    "tool",
+    "droplet"
+  ],
+  "author": "Erlend Ellingsen <erlend.ame@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ErlendEllingsen/digitalocean-developer-firewall/issues"
+  },
+  "homepage": "https://github.com/ErlendEllingsen/digitalocean-developer-firewall#readme",
   "dependencies": {
     "colors": "^1.2.1",
     "minimist": "^1.2.0",
     "public-ip": "^2.4.0",
     "request": "^2.85.0",
     "validate-ip-node": "^1.0.6"
+  },
+  "bin": {
+    "do-firewall": "./app.js"
   }
 }
